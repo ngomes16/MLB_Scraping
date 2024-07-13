@@ -1,37 +1,43 @@
 from yahoo_scraper import scrape_yahoo_odds
 from data_processing import read_historical_data, calculate_betting_strength, determine_betting_recommendation
 from twitter import authenticate_twitter, post_to_twitter
+import logging
+import datetime
 
 def main():
+    logging.info("Starting main function")
+    try:
+        # Fetch Yahoo's Expected Runs
+        url = "https://sports.yahoo.com/mlb/odds/"
+        yahoo_expected_runs = scrape_yahoo_odds(url)
 
-    # Step 1: Fetch Yahoo's Expected Runs
-    url = "https://sports.yahoo.com/mlb/odds/"
-    yahoo_expected_runs = scrape_yahoo_odds(url)
+        # Read Historical Data
+        historical_data = read_historical_data()
 
-    url = "https://sports.yahoo.com/mlb/odds/"
-    yahoo_expected_runs = scrape_yahoo_odds(url)
+        # Calculate Betting Strength
+        betting_strength = calculate_betting_strength(yahoo_expected_runs, historical_data)
 
-    # Step 2: Read Historical Data
-    historical_data = read_historical_data()
+        # Determine Betting Recommendation
+        betting_recommendations = determine_betting_recommendation(betting_strength, yahoo_expected_runs)
 
-    # Step 3: Calculate Betting Strength
-    betting_strength = calculate_betting_strength(yahoo_expected_runs, historical_data)
+        # Prepare messages
+        messages = [f"For {teams[0]} v {teams[1]} there is a {recommendation}" for teams, recommendation in betting_recommendations.items()]
 
-    # Step 4: Determine Betting Recommendation
-    betting_recommendations = determine_betting_recommendation(betting_strength, yahoo_expected_runs)
+        # Authenticate Twitter API
+        client = authenticate_twitter()
 
+        # Post to Twitter
+        post_to_twitter(client, messages)
 
-    # Prepare messages
-    messages = [f"For {teams[0]} v {teams[1]} there is a {recommendation}" for teams, recommendation in betting_recommendations.items()]
-
-    # Authenticate Twitter API
-    client = authenticate_twitter()
-
-    # Post to Twitter
-    post_to_twitter(client, messages)
-   
-   
+    except Exception as e:
+        logging.error(f"Error in main function: {e}")
+    
+    # print(messages)
 
 
 if __name__ == "__main__":
     main()
+
+
+# file = open(r'C:\Users\Nate Gomes\Desktop\MLB_Scraping\main.py', 'a')
+# file.write(f'{datetime.datetime.now()} - The script ran \n')

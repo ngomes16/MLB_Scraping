@@ -3,7 +3,7 @@ import csv
 input_file = 'games.txt'
 games = 'games.csv'
 
-# Read data from the text file
+
 with open(input_file, 'r') as f:
     lines = f.readlines()
 
@@ -21,7 +21,6 @@ for line in lines:
             score = team2_parts[1]
             data.append([team1, team2, score])
 
-# Write data to CSV file
 with open(games, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Team 1', 'Team 2', 'Score'])

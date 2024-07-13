@@ -26,4 +26,4 @@ for game in games:
             if team_name != strong_team:
                 other_team_score = int(team.next_sibling.strip().split('(')[-1].split(')')[0])
                 print(f"{strong_team} @ {team_name}, {strong_score + other_team_score}")
-                break  # Exit loop once the other team and score are found
+                break  # Exit loop once other team and score found

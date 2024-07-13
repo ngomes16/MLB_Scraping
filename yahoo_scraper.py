@@ -3,18 +3,17 @@ from bs4 import BeautifulSoup
 
 def scrape_yahoo_odds(url):
     try:
-        # Make a request to the URL
         response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for bad status codes
+        response.raise_for_status()  
 
-        # Parse the HTML content
+
         soup = BeautifulSoup(response.content, "html.parser")
 
-        # Find the upcoming games section
+        # Find ONLY the upcoming games section for good daily updates
         upcoming_games_section = soup.find("h3", class_="YahooSans-Bold Pb(20px) smartphone_Bdb(border-standings)", text="Upcoming")
 
         if upcoming_games_section:
-            # Find the container with all games under the upcoming games section
+            # Now go through these games
             games_container = upcoming_games_section.find_next("div", class_="bet-packs-wrapper")
             if games_container:
                 # Iterate over each game container
@@ -25,12 +24,14 @@ def scrape_yahoo_odds(url):
                     team_names = []
                     associated_number = None
 
-                    # Find all spans with the specific class containing team names
+                    # Find all spans with team names
                     team_spans = game.find_all("span", class_="Fw(600) Pend(4px) Ell D(ib) Maw(190px) Va(m)")
                     for team_span in team_spans:
+                        # Get names of teams
                         team_names.append(team_span.text.strip())
 
-                    # Find the associated number
+                    # Find the over under
+                    # HARD CODED SPECIFIC TO WEBSITE
                     associated_spans = game.find_all("span", class_="Lh(19px)")
                     if len(associated_spans) >= 4:
                         try:
@@ -38,9 +39,8 @@ def scrape_yahoo_odds(url):
                         except ValueError:
                             continue
 
-                    # Ensure there are exactly two team names and an associated number
                     if len(team_names) == 2 and associated_number is not None:
-                        # Sort team names alphabetically
+                        # Sort team names alphabetically NOT NEEDED ANYMORE BUT WILL KEEP
                         sorted_teams = tuple(sorted(team_names))
                         odds_data[sorted_teams] = associated_number
 
