@@ -2,7 +2,6 @@ from yahoo_scraper import scrape_yahoo_odds
 from data_processing import read_historical_data, calculate_betting_strength, determine_betting_recommendation
 from twitter import authenticate_twitter, post_to_twitter
 import logging
-import datetime
 
 def main():
     logging.info("Starting main function")
@@ -45,7 +44,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# file = open(r'C:\Users\Nate Gomes\Desktop\MLB_Scraping\main.py', 'a')
-# file.write(f'{datetime.datetime.now()} - The script ran \n')
