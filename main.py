@@ -27,12 +27,20 @@ def main():
         client = authenticate_twitter()
 
         # Post to Twitter
-        post_to_twitter(client, messages)
+        # if not messages:
+        #     client.create_tweet(text="There are no recommended bets today")
+        # else:
+        #     for message in messages:
+        #         client.create_tweet(text=message)
 
     except Exception as e:
         logging.error(f"Error in main function: {e}")
     
-    # print(messages)
+
+    if not messages:
+        print("There are no recommended bets today")
+    else:
+        print(messages)
 
 
 if __name__ == "__main__":
